@@ -95,6 +95,10 @@ static void app(void)
          strncpy(c.name, buffer, BUF_SIZE - 1);
          clients[actual] = c;
          actual++;
+
+         /* Send welcome message to the new client */
+         send_welcome_message(csock);
+
       }
       else
       {
@@ -192,6 +196,8 @@ static int init_connection(void)
    {
       perror("listen()");
       exit(errno);
+   }else{
+      printf("Server listening on port %d...\n", PORT);
    }
 
    return sock;
@@ -214,7 +220,6 @@ static int read_client(SOCKET sock, char *buffer)
    }
 
    buffer[n] = 0;
-
    return n;
 }
 
@@ -226,6 +231,13 @@ static void write_client(SOCKET sock, const char *buffer)
       exit(errno);
    }
 }
+
+void send_welcome_message(SOCKET client_sock)
+{
+    const char *welcome_message = "Welcome to the chat server!\n";
+    write_client(client_sock, welcome_message);
+}
+
 
 int main(int argc, char **argv)
 {

@@ -113,6 +113,8 @@ static int init_connection(const char *address)
    {
       perror("connect()");
       exit(errno);
+   }else{
+      printf("Connected to the server.\n");
    }
 
    return sock;
