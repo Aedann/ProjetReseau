@@ -39,9 +39,9 @@ void command_input(SOCKET sock){
           error("Error on socket write");
   memset(input,0,256);
   int end;
-  if ((end = read(sock, input, 255)) < 0) 
-          error("Error on socket read");
-  input[end] = '\0';
+   if ((end = read(sock, input, 255)) < 0) 
+           error("Error on socket read");
+  //input[end] = '\0';
   printf("%s\n", input);
 }
 

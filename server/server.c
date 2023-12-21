@@ -111,9 +111,9 @@ void app(void)
             if(FD_ISSET(clients[i].sock, &rdfs))
             {
                Client client = clients[i];
-               int c = read_client(clients[i].sock, buffer);
+               int received_bytes = read_client(clients[i].sock, buffer);
                /* client disconnected */
-               if(c == 0)
+               if(received_bytes == 0)
                {
                   closesocket(clients[i].sock);
                   remove_client(clients, i, &actual);
@@ -121,8 +121,11 @@ void app(void)
                   strncat(buffer, " disconnected !", BUF_SIZE - strlen(buffer) - 1);
                   send_message_to_all_clients(clients, client, actual, buffer, 1);
                }
-               else
+               else //Processing Client Command
                {
+                  buffer[received_bytes] = '\0'; // Ensure the buffer is null-terminated
+                  process_command(&client, buffer);
+                  write_client(clients[i].sock, "Command received and processed successfully.");
                   send_message_to_all_clients(clients, client, actual, buffer, 0);
                }
                break;

@@ -12,12 +12,12 @@ int main(int argc, char **argv)
 
    Client client1;
    initialize_client(&client1, 1, "password123");
-   add_account(&client1, 101);
-   add_account(&client1, 102);
+   add_account(&client1, 101, "mdp1");
+   add_account(&client1, 102, "mdp2");
 
-   deposit(&client1, 101, 500.0);
-   deposit(&client1, 102, 1000.0);
-   deposit(&client1, 103, 200.0); // Account not found
+   ajout(&client1, 101, "mdp1", 500.0);
+   ajout(&client1, 102, "mdp1", 1000.0);
+   ajout(&client1, 103, "mdp1", 200.0); // Account not found
 
    app();
 
