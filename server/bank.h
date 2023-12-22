@@ -4,13 +4,13 @@
 #include "structBank.h"
 
 
-void initialize_client(User *user, int user_id, const char *password);
-void add_account(User *user, int account_id, const char *password);
-void ajout(User *user, int account_id,  const char *password, char * res, double amount);
-void retrait(User *user, int account_id,  const char *password, char * res, double amount);
-void solde(User *user, int account_id,  const char *password, char * res);
-void operations(User *user, int account_id, const char *password, char * res);
-void process_command(User *user, char *buffer, char *res); 
+void initialize_user(User *users, int user_id, const char *password) ;
+void add_account(User *users, int account_id, const char *password) ;
+void ajout(User *users, int user_id, int account_id,  const char *password, char *res, double amount) ;
+void retrait(User *users, int user_id, int account_id, const char *password, char *res, double amount) ;
+void solde(User *users, int user_id, int account_id, const char *password, char *res) ;
+void operations(User *users, int user_id, int account_id, const char *password, char *res);
+void process_command(User *user, char *buffer, char *res);
 
 #endif /* guard */
 

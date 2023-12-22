@@ -17,10 +17,10 @@ int main(int argc, char **argv)
 
    init();
 
-   Client client1;
-   initialize_client(&client1, 1, "password123");
-   add_account(&client1, 101, "password123");
-   add_account(&client1, 102, "password123");
+   User users[256];
+   initialize_user(users, 1, "password123");
+   add_account(users, 101, "password123");
+   add_account(users, 102, "password123");
 
    app(argv[2]);
 
