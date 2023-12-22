@@ -15,15 +15,14 @@
 #endif
 
 #define CRLF        "\r\n"
-#define PORT         1977
 #define MAX_CLIENTS     100
 
 
 
 void init(void);
 void end(void);
-void app(void);
-int init_connection(void);
+void app(char * argvPort);
+int init_connection(int PORT);
 void end_connection(int sock);
 int read_client(SOCKET sock, char *buffer);
 void write_client(SOCKET sock, const char *buffer);

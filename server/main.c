@@ -8,18 +8,21 @@
 
 int main(int argc, char **argv)
 {
+
+   if(argc < 2)
+   {
+      printf("Usage : %s [port]\n", argv[0]);
+      return EXIT_FAILURE;
+   }
+
    init();
 
    Client client1;
    initialize_client(&client1, 1, "password123");
-   add_account(&client1, 101, "mdp1");
-   add_account(&client1, 102, "mdp2");
+   add_account(&client1, 101, "password123");
+   add_account(&client1, 102, "password123");
 
-   ajout(&client1, 101, "mdp1", 500.0);
-   ajout(&client1, 102, "mdp1", 1000.0);
-   ajout(&client1, 103, "mdp1", 200.0); // Account not found
-
-   app();
+   app(argv[2]);
 
    end();
 

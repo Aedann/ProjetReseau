@@ -20,6 +20,17 @@ typedef struct in_addr IN_ADDR;
 #define MAX_PASSWORD_LENGTH 50
 #define BUF_SIZE 1024
 
+typedef enum operation_type{
+    AJOUT,
+    RETRAIT
+}operation_t;
+
+typedef struct operation
+{
+    char date[64];
+    operation_t type;
+    float somme;
+} operation;
 
 typedef struct {
     int account_id;
@@ -29,10 +40,13 @@ typedef struct {
 typedef struct {
    SOCKET sock;
    char name[BUF_SIZE];
-   int client_id;
+} Client;
+
+typedef struct {
+   int user_id;
    char password[MAX_PASSWORD_LENGTH];
    Account accounts[MAX_ACCOUNTS];
    int num_accounts;
-} Client;
+} User;
 
 #endif

@@ -26,28 +26,29 @@ void end(void)
 }
 
 void command_input(SOCKET sock){
-  char input[256];
-  printf("Enter the message: ");
-  memset(input,0,256);
-  fgets(input,255,stdin);
+   char input[256];
+   printf("Enter the message: ");
+   memset(input,0,256);
+   fgets(input,255,stdin);
 
-  //exit command
-  if(!strcmp(input, "exit\n"))
-    return;
+   //exit command
+   if(!strcmp(input, "exit\n"))
+     return;
 
-  if (write(sock, input, strlen(input)) < 0) 
-          error("Error on socket write");
-  memset(input,0,256);
-  int end;
+   if (write(sock, input, strlen(input)) < 0) 
+      error("Error on socket write");
+   memset(input,0,256);
+   int end;
    if ((end = read(sock, input, 255)) < 0) 
-           error("Error on socket read");
-  //input[end] = '\0';
-  printf("%s\n", input);
+      error("Error on socket read");
+   //input[end] = '\0';
+   printf("Read : %s\n", input);
 }
 
-void app(const char *address, const char *name)
+void app(const char *address, char * argvPort, const char *name)
 {
-   SOCKET sock = init_connection(address);
+   int PORT = atoi(argvPort);
+   SOCKET sock = init_connection(address, PORT);
    char buffer[BUF_SIZE];
    fd_set rdfs;
 
@@ -105,7 +106,7 @@ void app(const char *address, const char *name)
    end_connection(sock);
 }
 
-int init_connection(const char *address)
+int init_connection(const char *address, int PORT)
 {
    SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
    SOCKADDR_IN sin = { 0 };

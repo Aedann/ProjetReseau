@@ -4,9 +4,10 @@
 #include "bank.h"
 
 
-int initialize_client(Client *client, int client_id, const char *password) {
+void initialize_client(Client *client, int client_id, const char *password) {
     if (client == NULL || password == NULL) {
-        return -1; // Erreur d'argument
+        printf("Erreur d'argument\n ");
+        return; // Erreur d'argument
     }
 
     // Initialiser les champs du client
@@ -14,24 +15,27 @@ int initialize_client(Client *client, int client_id, const char *password) {
     strncpy(client->password, password, MAX_PASSWORD_LENGTH - 1);
     client->password[MAX_PASSWORD_LENGTH - 1] = '\0';
     client->num_accounts = 0;
-
-    return 0; // Initialisation réussie
+    printf("Client créé avec succès\n");
+    return; // Initialisation réussie
 }
 
-int add_account(Client *client, int account_id, const char *password) {
+void add_account(Client *client, int account_id, const char *password) {
     if (client == NULL || password == NULL) {
-        return -1; // Erreur d'argument
+        printf("Erreur d'argument\n ");
+        return; // Erreur d'argument
     }
 
     // Vérifier si le client a atteint le nombre maximum de comptes
     if (client->num_accounts >= MAX_ACCOUNTS) {
-        return -2; // Nombre maximum de comptes atteint
+        printf("Nombre maximum de comptes atteint\n ");
+        return; // Nombre maximum de comptes atteint
     }
 
     // Vérifier si le compte existe déjà
     for (int i = 0; i < client->num_accounts; i++) {
         if (client->accounts[i].account_id == account_id) {
-            return -3; // Le compte existe déjà
+            printf("Le compte existe déjà\n ");
+            return; // Le compte existe déjà
         }
     }
 
@@ -39,33 +43,35 @@ int add_account(Client *client, int account_id, const char *password) {
     client->accounts[client->num_accounts].account_id = account_id;
     client->accounts[client->num_accounts].balance = 0.0;
     client->num_accounts++;
-
-    return 0; // Ajout de compte réussi
+    printf("Compte créé avec succès\n");
+    return; // Ajout de compte réussi
 }
 
-int ajout(Client *client, int account_id,  const char *password, double amount) {
+void ajout(Client *client, int client_id, int account_id,  const char *password, char *res, double amount) {
     // Vérifier l'authentification du client (remplacez cela par votre logique d'authentification)
+    printf("Translated : AJOUT %d %d %s %f\n",client->client_id, account_id, password, amount);
     if (strcmp(client->password, password) != 0) {
-        return -1; // Authentification échouée
+        strncpy(res,"KO",255); // Authentification échouée
     }
 
     // Rechercher le compte
-    int i;
+    int i;  
     for (i = 0; i < client->num_accounts; i++) {
         if (client->accounts[i].account_id == account_id) {
             // Ajouter la somme au solde du compte
             client->accounts[i].balance += amount;
-            return 0; // Opération réussie
+            strncpy(res,"OK : Opération réussie",255);
         }
     }
 
-    return -2; // Compte non trouvé
+    strncpy(res,"KO : Compte non trouvé",255); 
+    return;
 }
 
-int retrait(Client *client, int account_id, const char *password, double amount) {
+void retrait(Client *client, int client_id, int account_id, const char *password, char *res, double amount) {
     // Vérifier l'authentification du client (remplacez cela par votre logique d'authentification)
     if (strcmp(client->password, password) != 0) {
-        return -1; // Authentification échouée
+        strncpy(res,"KO : Authentification échouée",255);
     }
 
     // Rechercher le compte
@@ -76,20 +82,21 @@ int retrait(Client *client, int account_id, const char *password, double amount)
             if (client->accounts[i].balance >= amount) {
                 // Retirer la somme du solde du compte
                 client->accounts[i].balance -= amount;
-                return 0; // Opération réussie
+                strncpy(res,"OK : Opération réussie",255);
             } else {
-                return -3; // Solde insuffisant
+                strncpy(res,"KO : Solde insuffisant",255);
             }
         }
     }
 
-    return -2; // Compte non trouvé
+    strncpy(res,"KO : Compte non trouvé",255); 
+    return;
 }
 
-int solde(Client *client, int account_id, const char *password) {
+void solde(Client *client, int client_id, int account_id, const char *password, char *res) {
     // Vérifier l'authentification du client (remplacez cela par votre logique d'authentification)
     if (strcmp(client->password, password) != 0) {
-        return -1; // Authentification échouée
+        strncpy(res,"KO : Authentification échouée",255); 
     }
 
     // Rechercher le compte
@@ -97,18 +104,18 @@ int solde(Client *client, int account_id, const char *password) {
     for (i = 0; i < client->num_accounts; i++) {
         if (client->accounts[i].account_id == account_id) {
             // Formater la réponse
-            printf("RES_SOLDE %.2f date_dernière_opération\n", client->accounts[i].balance);
-            return 0; // Opération réussie
+            sprintf(res,"RES_SOLDE %.2f date_dernière_opération\n", client->accounts[i].balance);
         }
     }
 
-    return -2; // Compte non trouvé
+    strncpy(res,"KO : Compte non trouvé",255);
+    return;
 }
 
-int operations(Client *client, int account_id, const char *password) {
+void operations(Client *client, int client_id, int account_id, const char *password, char *res) {
     // Vérifier l'authentification du client (remplacez cela par votre logique d'authentification)
     if (strcmp(client->password, password) != 0) {
-        return -1; // Authentification échouée
+        strncpy(res,"KO : Authentification échouée",255); // Authentification échouée
     }
 
     // Rechercher le compte
@@ -117,48 +124,46 @@ int operations(Client *client, int account_id, const char *password) {
         if (client->accounts[i].account_id == account_id) {
             // Formater la réponse (vous devez remplacer cela par votre logique pour récupérer les 10 dernières opérations)
             printf("RES_OPERATIONS type_opération date_opération montant_operation\n");
-            return 0; // Opération réussie
+            strncpy(res,"OK : Opération réussie",255); 
         }
     }
 
-    return -2; // Compte non trouvé
+    strncpy(res,"KO : Compte non trouvé",255); 
+    return;
 }
 
-int process_command(Client *client, char *buffer) {
+void process_command(Client *client, char *buffer, char *res) {
     printf("Received from %s: %s\n", client->name, buffer);
-
+    fflush(stdout);
     char command[20];
     int id_client, id_compte;
     char password[MAX_PASSWORD_LENGTH];
     double somme = 0.0; // Initialiser à zéro
-
     // Utiliser sscanf pour extraire les arguments du buffer
     int result = sscanf(buffer, "%s %d %d %s %lf", command, &id_client, &id_compte, password, &somme);
-
+    printf("Command : %s\n",command);
     if (result < 3) {
-        // Le format de la commande est invalide
-        return -1;
+        strncpy(res,"KO : Le format de la commande est invalide",255);
     }
-
     // Traiter la commande en fonction du type
     if (strcmp(command, "AJOUT") == 0 || strcmp(command, "RETRAIT") == 0) {
         if (result < 5) {
-            // Pas suffisamment d'arguments pour AJOUT ou RETRAIT
-            return -1;
+            strncpy(res,"KO : Pas suffisamment d'arguments pour AJOUT ou RETRAIT",255);
         }
     }
-
     // Traiter la commande en fonction du type
     if (strcmp(command, "AJOUT") == 0) {
-        return ajout(client, id_compte, password, somme);
+        ajout(client, id_compte, password, res, somme);
     } else if (strcmp(command, "RETRAIT") == 0) {
-        return retrait(client, id_compte, password, somme);
+        retrait(client, id_compte, password, res, somme);
     } else if (strcmp(command, "SOLDE") == 0) {
-        return solde(client, id_compte, password);
+        solde(client, id_compte, password, res);
     } else if (strcmp(command, "OPERATIONS") == 0) {
-        return operations(client, id_compte, password);
+        operations(client, id_compte, password, res);
     } else {
-        // Commande inconnue
-        return -1;
+        strncpy(res,"KO : Commande inconnue",255);
     }
+    printf("Response : %s\n",res);
+    
+    return;
 }

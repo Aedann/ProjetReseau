@@ -26,15 +26,18 @@ void end(void)
 #endif
 }
 
-void app(void)
+void app(char * argvPort)
 {
-   SOCKET sock = init_connection();
+   int PORT = atoi(argvPort);
+   SOCKET sock = init_connection(PORT);
+   //setsocopt(sock,SOL_SOCK,SO_REUSEADDR,&(int){1},sizeof(int));
    char buffer[BUF_SIZE];
    /* the index for the array */
    int actual = 0;
    int max = sock;
    /* an array for all clients */
    Client clients[MAX_CLIENTS];
+   User users[MAX_CLIENTS];
 
    fd_set rdfs;
 
@@ -42,6 +45,7 @@ void app(void)
 
    while(1)
    {
+      //printf("\nWhile(1)\n");
       int i = 0;
       FD_ZERO(&rdfs);
 
@@ -97,7 +101,7 @@ void app(void)
          strncpy(c.name, buffer, BUF_SIZE - 1);
          clients[actual] = c;
          actual++;
-
+         //printf("\nCSOCK = %d\n",csock);
          /* Send welcome message to the new client */
          send_welcome_message(csock);
 
@@ -119,21 +123,26 @@ void app(void)
                   remove_client(clients, i, &actual);
                   strncpy(buffer, client.name, BUF_SIZE - 1);
                   strncat(buffer, " disconnected !", BUF_SIZE - strlen(buffer) - 1);
-                  send_message_to_all_clients(clients, client, actual, buffer, 1);
+                  //send_message_to_all_clients(clients, client, actual, buffer, 1);
                }
                else //Processing Client Command
                {
+                  char res[256];
                   buffer[received_bytes] = '\0'; // Ensure the buffer is null-terminated
-                  process_command(&client, buffer);
-                  write_client(clients[i].sock, "Command received and processed successfully.");
-                  send_message_to_all_clients(clients, client, actual, buffer, 0);
+                  //printf("res avant : %s\n",res);
+                  process_command(&client, buffer, res);
+                  //printf("\nprocess_command done with res = %s\n",res);
+                  ////printf("client.sock = %d",client.sock);
+                  write_client(client.sock, res);
+                  ////printf("\nwrite_client done with size_t = %zd",sent);
+                  //send_message_to_all_clients(clients, client, actual, buffer, 0);
                }
                break;
             }
          }
       }
    }
-
+   //printf("End app\n");
    clear_clients(clients, actual);
    end_connection(sock);
 }
@@ -176,7 +185,7 @@ void send_message_to_all_clients(Client *clients, Client sender, int actual, con
    }
 }
 
-int init_connection(void)
+int init_connection(int PORT)
 {
    SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
    SOCKADDR_IN sin = { 0 };
