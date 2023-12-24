@@ -19,8 +19,8 @@ int main(int argc, char **argv)
 
    User users[256];
    initialize_user(users, 1, "password123");
-   add_account(users, 101, "password123");
-   add_account(users, 102, "password123");
+   add_account(users, 1 ,101, "password123");
+   add_account(users, 1 ,102, "password123");
 
    app(argv[2]);
 

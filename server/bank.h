@@ -5,7 +5,7 @@
 
 
 void initialize_user(User *users, int user_id, const char *password) ;
-void add_account(User *users, int account_id, const char *password) ;
+void add_account(User *users,int user_id, int account_id, const char *password) ;
 void ajout(User *users, int user_id, int account_id,  const char *password, char *res, double amount) ;
 void retrait(User *users, int user_id, int account_id, const char *password, char *res, double amount) ;
 void solde(User *users, int user_id, int account_id, const char *password, char *res) ;

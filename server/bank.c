@@ -10,10 +10,15 @@ void initialize_user(User *users, int user_id, const char *password) {
         printf("Erreur d'argument\n ");
         return; // Erreur d'argument
     }
+    printf("Entering initialize_user : \n sizeof(users) : %d\n",sizeof(users));
     int i = 0;
-    while(users[i].user_id != NULL){
+    for(i = 0; i < sizeof(users); i++){
+        printf("i = %d\n",i);
         i++;
-        break;
+        if(users[i].user_id != 0){
+            printf("BREAK Initialize_user\n");
+            break;
+        }
     }
     // Initialiser les champs du user
     users[i].user_id = user_id;
@@ -24,17 +29,22 @@ void initialize_user(User *users, int user_id, const char *password) {
     return; // Initialisation réussie
 }
 
-void add_account(User *users, int account_id, const char *password) {
+void add_account(User *users, int user_id, int account_id, const char *password) {
+    printf("Entering add_account\n");
+    int i = 0;
+    for(i = 0; i < sizeof(users); i++){
+        printf("i = %d\n",i);
+        i++;    
+        if(users[i].user_id != NULL){
+            printf("User en i = %d",i);
+            break;
+        }
+    }
+
     if (users == NULL || password == NULL) {
         printf("Erreur d'argument\n ");
         return; // Erreur d'argument
     }
-    int i = 0;
-    while(users[i].user_id != NULL){
-        i++;
-        break;
-    }
-
     // Vérifier si le user a atteint le nombre maximum de comptes
     if (users[i].num_accounts >= MAX_ACCOUNTS) {
         printf("Nombre maximum de comptes atteint\n ");
@@ -59,10 +69,13 @@ void add_account(User *users, int account_id, const char *password) {
 
 void ajout(User *users, int user_id, int account_id,  const char *password, char *res, double amount) {
     int i = 0;
-    while(users[i].user_id == user_id){
-        i++;
-        break;
+    for(i = 0; i < sizeof(users); i++){
+        printf("\n FOR users[i].user_id = %d , user_id = %d, i = %d\n",users[i].user_id,user_id,i);
+        if(users[i].user_id == user_id){
+            break;
+        }
     }
+    printf("\n users[i].user_id = %d , user_id = %d\n",users[i].user_id,user_id);
     // Vérifier l'authentification du user (remplacez cela par votre logique d'authentification)
     printf("Translated : AJOUT %d %d %s %f\n",users[i].user_id, account_id, password, amount);
     if (strcmp(users[i].password, password) != 0) {
@@ -85,9 +98,10 @@ void ajout(User *users, int user_id, int account_id,  const char *password, char
 
 void retrait(User *users, int user_id, int account_id, const char *password, char *res, double amount) {
     int i = 0;
-    while(users[i].user_id == user_id){
-        i++;
-        break;
+    for(i = 0; i < sizeof(users); i++){
+        if(users[i].user_id == user_id){
+            break;
+        }
     }
     // Vérifier l'authentification du user (remplacez cela par votre logique d'authentification)
     if (strcmp(users[i].password, password) != 0) {
@@ -115,9 +129,10 @@ void retrait(User *users, int user_id, int account_id, const char *password, cha
 
 void solde(User *users, int user_id, int account_id, const char *password, char *res) {
     int i = 0;
-    while(users[i].user_id == user_id){
-        i++;
-        break;
+    for(i = 0; i < sizeof(users); i++){
+        if(users[i].user_id == user_id){
+            break;
+        }
     }
     // Vérifier l'authentification du user (remplacez cela par votre logique d'authentification)
     if (strcmp(users[i].password, password) != 0) {
@@ -139,9 +154,10 @@ void solde(User *users, int user_id, int account_id, const char *password, char 
 
 void operations(User *users, int user_id, int account_id, const char *password, char *res) {
     int i = 0;
-    while(users[i].user_id == user_id){
-        i++;
-        break;
+    for(i = 0; i < sizeof(users); i++){
+        if(users[i].user_id == user_id){
+            break;
+        }
     }
     // Vérifier l'authentification du user (remplacez cela par votre logique d'authentification)
     if (strcmp(users[i].password, password) != 0) {
@@ -163,11 +179,6 @@ void operations(User *users, int user_id, int account_id, const char *password, 
 }
 
 void process_command(User *users,  char *buffer, char *res) {
-    // int i = 0;
-    // while(users[i].user_id == user_id){
-    //     i++;
-    //     break;
-    // }
     //printf("Received from %s: %s\n", client[i].name, buffer);
     fflush(stdout);
     char command[20];
