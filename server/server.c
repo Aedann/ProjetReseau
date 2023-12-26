@@ -26,7 +26,7 @@ void end(void)
 #endif
 }
 
-void app(char * argvPort)
+void app(char * argvPort, User *users)
 {
    int PORT = atoi(argvPort);
    SOCKET sock = init_connection(PORT);
@@ -37,7 +37,6 @@ void app(char * argvPort)
    int max = sock;
    /* an array for all clients */
    Client clients[MAX_CLIENTS];
-   User users[MAX_CLIENTS];
 
    fd_set rdfs;
 
@@ -127,14 +126,15 @@ void app(char * argvPort)
                }
                else //Processing Client Command
                {
-                  char res[256];
+                  char res[MAX_RES_SIZE];
                   buffer[received_bytes] = '\0'; // Ensure the buffer is null-terminated
                   //printf("res avant : %s\n",res);
-                  process_command(&client, buffer, res);
+                  printf("APP : users[6].user_id = %d\n",users[6].user_id);
+                  process_command(users, buffer, res);
                   //printf("\nprocess_command done with res = %s\n",res);
-                  ////printf("client.sock = %d",client.sock);
+                  //printf("client.sock = %d",client.sock);
                   write_client(client.sock, res);
-                  ////printf("\nwrite_client done with size_t = %zd",sent);
+                  //printf("\nwrite_client done with size_t = %zd",sent);
                   //send_message_to_all_clients(clients, client, actual, buffer, 0);
                }
                break;

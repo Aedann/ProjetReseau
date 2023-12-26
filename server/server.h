@@ -21,7 +21,7 @@
 
 void init(void);
 void end(void);
-void app(char * argvPort);
+void app(char * argvPort, User *users);
 int init_connection(int PORT);
 void end_connection(int sock);
 int read_client(SOCKET sock, char *buffer);

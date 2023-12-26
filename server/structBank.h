@@ -19,22 +19,25 @@ typedef struct in_addr IN_ADDR;
 #define MAX_ACCOUNTS 10
 #define MAX_PASSWORD_LENGTH 50
 #define BUF_SIZE 1024
+#define MAX_OPERATIONS 64
+#define MAX_RES_SIZE 4096
 
-typedef enum operation_type{
+typedef enum Operation_type{
     AJOUT,
     RETRAIT
-}operation_t;
+}Operation_t;
 
-typedef struct operation
+typedef struct Operation
 {
     char date[64];
-    operation_t type;
+    Operation_t type;
     float somme;
-} operation;
+} Operation;
 
 typedef struct {
     int account_id;
-    double balance;
+    float balance;
+    Operation operations[MAX_OPERATIONS];
 } Account;
 
 typedef struct {

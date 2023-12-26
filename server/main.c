@@ -17,12 +17,22 @@ int main(int argc, char **argv)
 
    init();
 
-   User users[256];
-   initialize_user(users, 1, "password123");
-   add_account(users, 1 ,101, "password123");
-   add_account(users, 1 ,102, "password123");
-
-   app(argv[2]);
+   User users[MAX_USERS];
+   for(int i = 0; i< MAX_USERS ;i++){
+      memset(&users[i],0,sizeof users[i]);
+   }
+   users[6].user_id = 69;
+   //printf("&users = %d \n",users);
+   //printf("sizeof(users[1]) = %d\n",sizeof(users[1]));
+   //printf("users[15].user_id = %d\n",users[15].user_id);
+   //printf("sizeof(users) = %d\n",sizeof(users));
+   initialize_user(users, 1, "123");
+   printf("users[0].user_id = %d\n",users[0].user_id);
+   add_account(users, 1 ,101, "123");
+   add_account(users, 1 ,102, "123");
+   printf("add_account réussi \n");
+   printf("users[0].user_id = %d\n",users[0].user_id);
+   app(argv[2],users);
 
    end();
 
