@@ -248,6 +248,6 @@ void write_client(SOCKET sock, const char *buffer)
 
 void send_welcome_message(SOCKET client_sock)
 {
-    const char *welcome_message = "Welcome to the chat server!\n";
+    const char *welcome_message = "Welcome to the chat server!\nUse these commands : \nAJOUT <id_client id_compte password somme>\nRETRAIT <id_client id_compte password somme>\nSOLDE <id_client id_compte password>\nOPERATIONS <id_client id_compte password>\n";
     write_client(client_sock, welcome_message);
 }

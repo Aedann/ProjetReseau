@@ -38,6 +38,7 @@ typedef struct {
     int account_id;
     float balance;
     Operation operations[MAX_OPERATIONS];
+    int num_operations;
 } Account;
 
 typedef struct {

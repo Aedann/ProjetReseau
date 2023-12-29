@@ -27,7 +27,7 @@ void end(void)
 
 void command_input(SOCKET sock){
    char input[256];
-   printf("Enter the message: ");
+   printf("Enter a command : ");
    memset(input,0,256);
    fgets(input,255,stdin);
 
