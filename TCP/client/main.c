@@ -13,7 +13,6 @@ int main(int argc, char **argv)
       printf("Usage : %s [address] [port] [pseudo]\n", argv[0]);
       return EXIT_FAILURE;
    }
-   printf("argv[2] : %s", argv[2]);
    init();
 
    app(argv[1], argv[2], argv[3]);

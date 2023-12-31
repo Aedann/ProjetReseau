@@ -41,12 +41,8 @@ void app(char * argvPort, User *users)
 
    fd_set rdfs;
 
-
-
    while(1)
    {
-      //printf("\nWhile(1)\n");
-      int i = 0;
       FD_ZERO(&rdfs);
 
       /* add STDIN_FILENO */
@@ -76,6 +72,7 @@ void app(char * argvPort, User *users)
          printf("\nReady to read Client\n");
          fflush(stdout);
          read_client(sock, &csin, buffer);
+
          if(check_if_client_exists(clients, &csin, actual) == 0)
          {
             if(actual != MAX_CLIENTS)
@@ -84,13 +81,19 @@ void app(char * argvPort, User *users)
                strncpy(c.name, buffer, BUF_SIZE - 1);
                clients[actual] = c;
                actual++;
+               /* Send welcome message to the new client */
+               send_welcome_message(sock, &csin);
             }
          }
          else
          {
             Client *client = get_client(clients, &csin, actual);
             if(client == NULL) continue;
-            send_message_to_all_clients(sock, clients, client, actual, buffer, 0);
+            // Processing Client Command
+            char res[MAX_RES_SIZE];
+            buffer[MAX_RES_SIZE - 1] = '\0'; // Ensure the buffer is null-terminated
+            process_command(users, buffer, res);
+            write_client(sock, &csin, res);
          }
       }
    }
@@ -158,7 +161,8 @@ void send_message_to_all_clients(int sock, Client *clients, Client *sender, int 
 
 int init_connection(int PORT)
 {
-   SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
+   /* UDP so SOCK_DGRAM */
+   SOCKET sock = socket(AF_INET, SOCK_DGRAM, 0);
    SOCKADDR_IN sin = { 0 };
 
    if(sock == INVALID_SOCKET)

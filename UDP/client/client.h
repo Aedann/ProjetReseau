@@ -38,6 +38,6 @@ int init_connection(const char *address, SOCKADDR_IN *sin, int PORT);
 void end_connection(int sock);
 int read_server(SOCKET sock, SOCKADDR_IN *sin, char *buffer);
 void write_server(SOCKET sock, SOCKADDR_IN *sin, const char *buffer);
-void command_input(SOCKET sock);
+void command_input(SOCKET sock, SOCKADDR_IN *sin);
 
 #endif /* guard */

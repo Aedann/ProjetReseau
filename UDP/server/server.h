@@ -18,7 +18,6 @@
 #define MAX_CLIENTS     100
 
 
-
 void init(void);
 void end(void);
 void app(char * argvPort, User *users);

@@ -25,23 +25,24 @@ void end(void)
 #endif
 }
 
-void command_input(SOCKET sock){
+void command_input(SOCKET sock, SOCKADDR_IN *sin){
    char input[256];
    printf("Enter a command : ");
+   fflush(stdout);
    memset(input,0,256);
    fgets(input,255,stdin);
 
    //exit command
    if(!strcmp(input, "exit\n"))
      return;
-
-   if (write(sock, input, strlen(input)) < 0) 
-      error("Error on socket write");
+   input[255] = '\0';
+   
+   write_server(sock, sin, input);
+   //GROS PROBLEME ICI, ENVOIE INTEMPESTIF !!!!!!!!!!!!!!!!!!!!!!!!
    memset(input,0,256);
-   int end;
-   if ((end = read(sock, input, 255)) < 0) 
-      error("Error on socket read");
-   //input[end] = '\0';
+   input[255] = '\0';
+   read_server(sock, sin, input);
+   input[255] = '\0';
    printf("Read : %s\n", input);
 }
 
@@ -103,7 +104,7 @@ void app(const char *address, char * argvPort, const char *name)
          }
          puts(buffer);
       }
-      command_input(sock); 
+      command_input(sock, &sin); 
    }
    end_connection(sock);
 }

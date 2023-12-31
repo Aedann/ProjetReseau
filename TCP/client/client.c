@@ -34,13 +34,14 @@ void command_input(SOCKET sock){
    //exit command
    if(!strcmp(input, "exit\n"))
      return;
-
-   if (write(sock, input, strlen(input)) < 0) 
-      error("Error on socket write");
+   write_server(sock, input);
+   // if (write(sock, input, strlen(input)) < 0) 
+   //    error("Error on socket write");
    memset(input,0,256);
-   int end;
-   if ((end = read(sock, input, 255)) < 0) 
-      error("Error on socket read");
+   read_server(sock, input);
+   // int end;
+   // if ((end = read(sock, input, 255)) < 0) 
+   //    error("Error on socket read");
    //input[end] = '\0';
    printf("Read : %s\n", input);
 }
