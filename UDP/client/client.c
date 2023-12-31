@@ -38,7 +38,7 @@ void command_input(SOCKET sock, SOCKADDR_IN *sin){
    input[255] = '\0';
    
    write_server(sock, sin, input);
-   //GROS PROBLEME ICI, ENVOIE INTEMPESTIF !!!!!!!!!!!!!!!!!!!!!!!!
+   //Probleme ici, envoie intempestif
    memset(input,0,256);
    input[255] = '\0';
    read_server(sock, sin, input);

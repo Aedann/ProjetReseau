@@ -250,3 +250,65 @@ void send_welcome_message(SOCKET client_sock)
     const char *welcome_message = "Welcome to the chat server!\nUse these commands : \nAJOUT <id_client id_compte password somme>\nRETRAIT <id_client id_compte password somme>\nSOLDE <id_client id_compte password>\nOPERATIONS <id_client id_compte password>\n";
     write_client(client_sock, welcome_message);
 }
+
+
+
+
+
+
+La fonction \mintinline{c}{accept} est utilisée pour accepter une nouvelle connexion TCP. Elle prend le socket d'écoute (\mintinline{c}{sock}), crée un nouveau socket dédié à la communication avec le client (\mintinline{c}{csock}), et récupère les informations du client telles que son adresse IP et le port utilisé.
+
+\begin{minted}{c}
+int csock = accept(sock, (SOCKADDR *)&csin, &sinsize);
+\end{minted}
+
+La fonction \mintinline{c}{send} est utilisée pour envoyer des données sur un socket TCP. Elle prend en argument le descripteur de socket (\mintinline{c}{sock}), le tampon contenant les données (\mintinline{c}{buffer}), la longueur des données à envoyer (\mintinline{c}{length}), et des options supplémentaires (\mintinline{c}{flags}).
+
+\begin{minted}{c}
+send(sock, buffer, length, flags);
+\end{minted}
+
+La fonction \mintinline{c}{sendto} est utilisée pour envoyer des données sur un socket UDP avec spécification du destinataire. Elle prend en argument le descripteur de socket (\mintinline{c}{sock}), le tampon contenant les données (\mintinline{c}{buffer}), la longueur des données à envoyer (\mintinline{c}{length}), des options supplémentaires (\mintinline{c}{flags}), et les informations sur le destinataire (\mintinline{c}{to}).
+
+\begin{minted}{c}
+sendto(sock, buffer, length, flags, (SOCKADDR *)&to, sizeof to);
+\end{minted}
+
+La fonction \mintinline{c}{recv} est utilisée pour recevoir des données depuis un socket TCP. Elle prend en argument le descripteur de socket (\mintinline{c}{sock}), le tampon où stocker les données reçues (\mintinline{c}{buffer}), la longueur maximale des données à recevoir (\mintinline{c}{length}), et des options supplémentaires (\mintinline{c}{flags}).
+
+\begin{minted}{c}
+recv(sock, buffer, length, flags);
+\end{minted}
+
+La fonction \mintinline{c}{recvfrom} est utilisée pour recevoir des données depuis un socket UDP avec spécification de l'expéditeur. Elle prend en argument le descripteur de socket (\mintinline{c}{sock}), le tampon où stocker les données reçues (\mintinline{c}{buffer}), la longueur maximale des données à recevoir (\mintinline{c}{length}), des options supplémentaires (\mintinline{c}{flags}), et les informations sur l'expéditeur (\mintinline{c}{from}).
+
+\begin{minted}{c}
+recvfrom(sock, buffer, length, flags, (SOCKADDR *)&from, &fromlen);
+\end{minted}
+
+
+
+
+Faire "make" dans ./UDP ou ./TCP
+\newline
+Lancer le server avec :
+\newline
+./server.out localhost PORT
+\newline
+
+\newline
+Lancer le client avec : 
+\newline
+./client.out localhost PORT username
+\newline
+
+\newline
+Les comptes déjà créés s'affichent en console : 
+\newline
+ - Un utilisateur avec pour ID : 1 et mot de passe : chaton123
+\newline
+ - Deux comptes 101 et 102.
+\newline
+(changer dans le main.c en cas de besoins).
+\newline
+On peut quitter le programme avec exit.
