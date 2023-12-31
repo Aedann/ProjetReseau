@@ -15,7 +15,6 @@ void initialize_user(User *users, int user_id, const char *password) {
     int i = 0;
     for(i = 0; i < MAX_USERS; i++){
         if(users[i].user_id == 0){
-            fflush(stdout);
             break;
         }
     }
@@ -73,33 +72,26 @@ void add_operation(User *users, int index, int account_index, Operation_t type, 
     size_t ret = strftime(users[index].accounts[account_index].operations[users[index].accounts[account_index].num_operations].date, sizeof(char)*64, "%c", tm);
     assert(ret);
     users[index].accounts[account_index].num_operations += 1;
-    fflush(stdout);
     return;
 }
 
 
 void ajout(User *users, int user_id, int account_id,  const char *password, char *res, double amount) {
     int i = 0;
-    printf("users[0].user_id = %d\n",users[0].user_id);
     for(i = 0; i < MAX_USERS; i++){
-        printf("\n FOR users[%d].user_id = %d , user_id = %d, i = %d\n",i,users[i].user_id,user_id,i);
         if(users[i].user_id == user_id){
             break;
         }
     }
-    printf("\n users[%d].user_id = %d , user_id = %d\n",i,users[i].user_id,user_id);
     printf("Translated : AJOUT %d %d %s %f\n",users[i].user_id, account_id, password, amount);
 
-    printf("users[i].password = %s, password = %s\n",users[i].password, password);
     if (strcmp(users[i].password, password) != 0) {
         strncpy(res,"KO : Authentification échouée",255); // Authentification échouée
         return;
     }
     // Rechercher le compte
     int j;  
-    printf("account_id : %d, amount = %d, users[%].num_accounts = %d\n", account_id,amount,users[i].num_accounts);
     for (j = 0; j < users[i].num_accounts; j++) {
-        printf("users[i].accounts[j].account_id = %d",users[i].accounts[j].account_id);
         if (users[i].accounts[j].account_id == account_id) {
             // Ajouter la somme au solde du compte
             users[i].accounts[j].balance += amount;
@@ -115,24 +107,19 @@ void ajout(User *users, int user_id, int account_id,  const char *password, char
 
 void retrait(User *users, int user_id, int account_id,  const char *password, char *res, double amount) {
     int i = 0;
-    printf("users[0].user_id = %d\n",users[0].user_id);
     for(i = 0; i < MAX_USERS; i++){
-        printf("\n FOR users[%d].user_id = %d , user_id = %d, i = %d\n",i,users[i].user_id,user_id,i);
         if(users[i].user_id == user_id){
             break;
         }
     }
-    printf("\n users[%d].user_id = %d , user_id = %d\n",i,users[i].user_id,user_id);
-    printf("Translated : AJOUT %d %d %s %f\n",users[i].user_id, account_id, password, amount);
+    printf("Translated : RETRAIT %d %d %s %f\n",users[i].user_id, account_id, password, amount);
     if (strcmp(users[i].password, password) != 0) {
         strncpy(res,"KO : Authentification échouée",255); // Authentification échouée
         return;
     }
     // Rechercher le compte
     int j;  
-    printf("account_id : %d, amount = %d, users[%].num_accounts = %d\n", account_id,amount,users[i].num_accounts);
     for (j = 0; j < users[i].num_accounts; j++) {
-        printf("users[i].accounts[j].account_id = %d",users[i].accounts[j].account_id);
         if (users[i].accounts[j].account_id == account_id) {
             // Ajouter la somme au solde du compte
             users[i].accounts[j].balance -= amount;
@@ -147,11 +134,8 @@ void retrait(User *users, int user_id, int account_id,  const char *password, ch
 }
 
 void solde(User *users, int user_id, int account_id, const char *password, char *res) {
-    printf("SOLDEEEE : \n");
     int i = 0;
-    printf("users[0].user_id = %d\n",users[0].user_id);
     for(i = 0; i < MAX_USERS; i++){
-        printf("\n FOR users[%d].user_id = %d , user_id = %d, i = %d\n",i,users[i].user_id,user_id,i);
         if(users[i].user_id == user_id){
             break;
         }
@@ -163,9 +147,7 @@ void solde(User *users, int user_id, int account_id, const char *password, char 
 
     // Rechercher le compte
     int j;  
-    printf("account_id : %d,  users[%].num_accounts = %d\n", account_id,users[i].num_accounts);
     for (j = 0; j < users[i].num_accounts; j++) {
-        printf("users[i].accounts[j].account_id = %d",users[i].accounts[j].account_id);
         if (users[i].accounts[j].account_id == account_id) {
             // Ajouter la somme au solde du compte
             snprintf(res,MAX_RES_SIZE,"RES_SOLDE %.2f %s\n", users[i].accounts[j].balance,users[i].accounts[j].operations[users[i].accounts[j].num_operations-1].date);
@@ -179,7 +161,7 @@ void solde(User *users, int user_id, int account_id, const char *password, char 
 
 void operations(User *users, int user_id, int account_id, const char *password, char *res) {
     int i = 0;
-    for(i = 0; i < sizeof(users); i++){
+    for(i = 0; (size_t)i < sizeof(users); i++){
         if(users[i].user_id == user_id){
             break;
         }
@@ -191,12 +173,8 @@ void operations(User *users, int user_id, int account_id, const char *password, 
     
     // Rechercher le compte
     int j;  
-    printf("account_id : %d,  users[%d].num_accounts = %d\n", account_id,i,users[i].num_accounts);
     for (j = 0; j < users[i].num_accounts; j++) {
-        printf("users[%d].accounts[%d].account_id = %d\n",i,j,users[i].accounts[j].account_id);
         if (users[i].accounts[j].account_id == account_id) {
-            printf("Account found en %d",i);
-            fflush(stdout);
             break;
         }
         if(j > users[i].num_accounts){
@@ -210,9 +188,6 @@ void operations(User *users, int user_id, int account_id, const char *password, 
     if(start_index<0){start_index=0;}
     sprintf(res, "\nRES_OPERATIONS\n");
     for(int k = start_index; k < users[i].accounts[j].num_operations; k++){
-        printf("Test k = %d\n",k);
-        printf("users[%d].accounts[%d].operations[%d].somme = %f, users[%d].accounts[%d].operations[%d].date = %s\n",i,j,k,users[i].accounts[j].operations[k].somme,i,j,k,users[i].accounts[j].operations[k].date);
-        fflush(stdout);
         char res_begin[32];
         if((users[i].accounts[j].operations[k].type == AJOUT) ){
             snprintf(res_begin, sizeof(res_begin), "AJOUT ");
@@ -233,7 +208,6 @@ void operations(User *users, int user_id, int account_id, const char *password, 
 }
 
 void process_command(User *users,  char *buffer, char *res) {
-    fflush(stdout);
     char command[20];
     int user_id, id_compte;
     char password[MAX_PASSWORD_LENGTH];
@@ -243,7 +217,7 @@ void process_command(User *users,  char *buffer, char *res) {
     printf("Command : %s\n",command);
     if (result < 3) {
         strncpy(res,"KO : Le format de la commande est invalide",255);
-    }
+    } 
     if (strcmp(command, "AJOUT") == 0 || strcmp(command, "RETRAIT") == 0) {
         if (result < 5) {
             strncpy(res,"KO : Pas suffisamment d'arguments pour AJOUT ou RETRAIT",255);

@@ -29,5 +29,6 @@ void write_client(SOCKET sock, const char *buffer);
 void send_message_to_all_clients(Client *clients, Client client, int actual, const char *buffer, char from_server);
 void remove_client(Client *clients, int to_remove, int *actual);
 void clear_clients(Client *clients, int actual);
+void send_welcome_message(SOCKET client_sock);
 
 #endif /* guard */
